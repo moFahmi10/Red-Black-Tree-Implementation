@@ -43,7 +43,7 @@ class RBtree():
             y.left.parent = x
         y.parent = x.parent
         # If parent of x is null then x was the root and y will be the root
-        if x.parent == self.TNULL:
+        if x.parent == None:
             self.root = y
         # Else If x was the left child of its parent, set y to be the left of the parent
         elif x == x.parent.left:
@@ -61,7 +61,7 @@ class RBtree():
             y.right.parent = x
 
         y.parent = x.parent
-        if x.parent == self.TNULL:
+        if x.parent == None:
             self.root = y
         elif x == x.parent.right:
             x.parent.right = y
@@ -148,12 +148,10 @@ class RBtree():
         self.fix_insert(node)
 
 
-bst = RBtree()
-bst.insert(55)
-bst.insert(40)
-bst.insert(65)
-bst.insert(60)
-bst.insert(75)
-bst.insert(57)
 
-bst.print_tree()
+rbt = RBtree()
+dictf = open('EN-US-Dictionary.txt', 'r')
+dictionary = dictf.read().splitlines()
+for key in dictionary:
+        print(key)
+        rbt.insert(key)
