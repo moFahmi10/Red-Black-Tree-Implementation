@@ -36,6 +36,9 @@ class RBtree():
     def print_tree(self):
         self.__print_helper(self.root, "", True)
 
+    def get_root(self):
+        return self.root
+
     def left_rotate(self, x):
         y = x.right
         x.right = y.left
@@ -147,11 +150,52 @@ class RBtree():
         # properties
         self.fix_insert(node)
 
+    def height(self, node):
+        if node == self.TNULL:
+            return 0
+        return 1 + max(self.height(node.left), self.height(node.right))
 
+    def size(self, node):
+        if node == self.TNULL:
+            return 0
+        return 1 + self.size(node.left) + self.size(node.right)
+
+    def search(self, node, key):
+        if node == self.TNULL or key == node.key:
+            return node.key
+        if key < node.key:
+            return self.search(node.left, key)
+        return self.search(node.right, key)
 
 rbt = RBtree()
 dictf = open('EN-US-Dictionary.txt', 'r')
 dictionary = dictf.read().splitlines()
-for key in dictionary:
-        print(key)
-        rbt.insert(key)
+for word in dictionary:
+    rbt.insert(word)
+while True:
+    choice = input('1- SIZE\n2- INSERT\n3- LOOK UP\n4- TREE HEIGHT\n5- QUIT\n\nEnter the number associated with your choice: ')
+    if choice == '1':
+        print(f'\nDictionary size: {rbt.size(rbt.get_root())}\n')
+    elif choice == '2':
+        word = input('\nEnter word you want to insert: ')
+        found = rbt.search(rbt.get_root(), word) == word
+        if found:
+            print('\nERROR: Word already in the dictionary!\n')
+        elif not found:
+            rbt.insert(word)
+            print(f'\nDictionary size: {rbt.size(rbt.get_root())}\n')
+            print(f'Dictionary height: {rbt.height(rbt.get_root())}\n')
+    elif choice == '3':
+        word = input('\nEnter word you want to look up: ')
+        found = rbt.search(rbt.get_root(), word) == word
+        if found:
+            print('\nYES\n')
+        elif not found:
+            print('\nNO\n')
+    elif choice == '4':
+        print(f'\nDictionary height: {rbt.height(rbt.get_root())}\n')
+    elif choice == '5':
+        break
+    else:
+        print('\nPlease enter a valid choice (1-5)\n')
+dictf.close()
